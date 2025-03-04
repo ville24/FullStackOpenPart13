@@ -1,1 +1,1 @@
-DELETE https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/blogs/5
+DELETE https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/blogs/7

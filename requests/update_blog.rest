@@ -1,0 +1,6 @@
+PUT https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/blogs/7
+Content-Type: application/json
+
+{
+  "likes": "13"
+}

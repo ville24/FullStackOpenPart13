@@ -1,5 +1,6 @@
 # FullStackOpenPart13
 
+source ~/.bash_profile
 
  /home/codespace/.fly/bin/
  

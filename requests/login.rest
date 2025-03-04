@@ -1,0 +1,7 @@
+POST https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/login
+Content-Type: application/json
+
+{
+    "username": "ville",
+    "password": "salainen"
+}

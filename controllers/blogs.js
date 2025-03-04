@@ -13,9 +13,9 @@ router.post('/', async (req, res) => {
 })
 
 const blogFinder = async (req, res, next) => {
-    req.blog = await Blog.findByPk(req.params.id)
-    next()
-  } 
+  req.blog = await Blog.findByPk(req.params.id)
+  next()
+} 
 
 router.get('/:id', blogFinder, async (req, res) => {
   if (req.blog) {
@@ -32,7 +32,7 @@ router.delete('/:id', blogFinder, async (req, res) => {
   res.status(204).end()
 })
 
-router.put('/:id', blogFinder, async (req, res, next) => {
+router.put('/:id', blogFinder, async (req, res) => {
   if (req.blog) {
     req.blog.likes = req.body.likes
     await req.blog.save()

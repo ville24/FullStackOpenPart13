@@ -1,0 +1,7 @@
+POST https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/users
+Content-Type: application/json
+
+{
+    "name": "Ville S",
+    "username": "ville3"
+}

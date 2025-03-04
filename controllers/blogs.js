@@ -8,12 +8,8 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  try {
-    const blog = await Blog.create(req.body)
+  const blog = await Blog.create(req.body)
     res.json(blog)
-  } catch(error) {
-    return res.status(400).json({ error })
-  }
 })
 
 const blogFinder = async (req, res, next) => {
@@ -22,28 +18,25 @@ const blogFinder = async (req, res, next) => {
   } 
 
 router.get('/:id', blogFinder, async (req, res) => {
-  const blog = await Blog.findByPk(req.params.id)
-  if (blog) {
-    res.json(blog)
+  if (req.blog) {
+    res.json(req.blog)
   } else {
     res.status(404).end()
   }
 })
 
 router.delete('/:id', blogFinder, async (req, res) => {
-  const blog = await Blog.findByPk(req.params.id)
-  if (blog) {
-    await blog.destroy()
+  if (req.blog) {
+    await req.blog.destroy()
   }
   res.status(204).end()
 })
 
-router.put('/:id', blogFinder, async (req, res) => {
-  const blog = await Blog.findByPk(req.params.id)
-  if (blog) {
-    blog.likes = req.body.likes
-    await blog.save()
-    res.json(blog)
+router.put('/:id', blogFinder, async (req, res, next) => {
+  if (req.blog) {
+    req.blog.likes = req.body.likes
+    await req.blog.save()
+    res.json(req.blog)
   } else {
     res.status(404).end()
   }

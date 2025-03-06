@@ -1,15 +1,65 @@
 const router = require('express').Router()
 
-const { Blog } = require('../models')
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('../util/config')
+
+
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    try {
+      console.log(authorization.substring(7))
+      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+    } catch (error){
+      console.log(error)
+      return res.status(401).json({ error: 'token invalid' })
+    }
+  } else {
+    return res.status(401).json({ error: 'token missing' })
+  }
+  next()
+}
+
+const { Blog, User } = require('../models')
 
 router.get('/', async (req, res) => {
-  const blogs = await Blog.findAll()
+  let where = {}
+
+  if (req.query.search) {
+    where = {
+      [Op.or]: [{
+        title: {
+          [Sequelize.Op.iLike]: `%${req.query.search}%`
+        }
+      },
+      {
+        author: {
+          [Sequelize.Op.iLike]: `%${req.query.search}%`
+        }
+      }]
+    }   
+  }
+
+  const blogs = await Blog.findAll({
+    attributes: {
+      exclude: ['userId']
+    },
+    include: {
+      model: User,
+      attributes: ['name']
+    },
+    where,
+    order: [
+      ['likes', 'DESC']
+    ]
+  })
   res.json(blogs)
 })
 
-router.post('/', async (req, res) => {
-  const blog = await Blog.create(req.body)
-    res.json(blog)
+router.post('/', tokenExtractor, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id)
+  const blog = await Blog.create({ ...req.body, userId: user.id, date: new Date() })
+  res.json(blog)
 })
 
 const blogFinder = async (req, res, next) => {
@@ -25,14 +75,14 @@ router.get('/:id', blogFinder, async (req, res) => {
   }
 })
 
-router.delete('/:id', blogFinder, async (req, res) => {
+router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
   if (req.blog) {
     await req.blog.destroy()
   }
   res.status(204).end()
 })
 
-router.put('/:id', blogFinder, async (req, res) => {
+router.put('/:id', blogFinder, tokenExtractor, async (req, res) => {
   if (req.blog) {
     req.blog.likes = req.body.likes
     await req.blog.save()

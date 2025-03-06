@@ -1,9 +1,10 @@
-POST https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/blogs
+POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZpbGxlMkB2aWxsZS5jb20iLCJpZCI6MiwiaWF0IjoxNzQxMjg0ODAzfQ.6QlmcMKGHIMraEBe4mSCYnomAWozlS1KaCMHt_zZg2A
 
 {
   "title": "Canonical string reduction",
-  "author": "Edsger W. Dijkstra",
+  "author": "Edsger W. Dijkstra2",
   "url": "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
   "likes": "12"
 }

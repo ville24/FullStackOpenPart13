@@ -1,7 +1,7 @@
-POST https://super-duper-halibut-67jxv65x9g34wj7-3001.app.github.dev/api/users
+POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "name": "Ville S",
-    "username": "ville3"
+    "name": "Ville S2",
+    "username": "ville2@ville.com"
 }

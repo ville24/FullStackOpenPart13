@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const { Op } = require('sequelize')
 
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('../util/config')
@@ -29,12 +30,12 @@ router.get('/', async (req, res) => {
     where = {
       [Op.or]: [{
         title: {
-          [Sequelize.Op.iLike]: `%${req.query.search}%`
+          [Op.iLike]: `%${req.query.search}%`
         }
       },
       {
         author: {
-          [Sequelize.Op.iLike]: `%${req.query.search}%`
+          [Op.iLike]: `%${req.query.search}%`
         }
       }]
     }   
@@ -63,7 +64,15 @@ router.post('/', tokenExtractor, async (req, res) => {
 })
 
 const blogFinder = async (req, res, next) => {
-  req.blog = await Blog.findByPk(req.params.id)
+  req.blog = await Blog.findByPk(req.params.id, {
+    attributes: {
+      exclude: ['userId']
+    },
+    include: {
+      model: User,
+      attributes: ['username']
+    }
+  })
   next()
 } 
 
@@ -76,13 +85,13 @@ router.get('/:id', blogFinder, async (req, res) => {
 })
 
 router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
-  if (req.blog) {
+  if (req.blog && req.decodedToken.username === req.blog.user.username ) {
     await req.blog.destroy()
   }
   res.status(204).end()
 })
 
-router.put('/:id', blogFinder, tokenExtractor, async (req, res) => {
+router.put('/:id', blogFinder, async (req, res) => {
   if (req.blog) {
     req.blog.likes = req.body.likes
     await req.blog.save()

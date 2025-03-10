@@ -4,7 +4,7 @@ const { tokenExtractor } = require('../util/middleware')
 
 const { Session } = require('../models')
 
-router.get('/', tokenExtractor, async (request, response) => {
+router.delete('/', tokenExtractor, async (req, res) => {
     const sessions = await Session.findAll({
         where: {
             userId: req.decodedToken.id 

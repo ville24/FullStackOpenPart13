@@ -23,7 +23,7 @@ router.get('/:id', async (req, res) => {
   if (req.query.read) {
     where = { read: req.query.read }   
   }
-
+  
   const user = await User.findByPk(req.params.id, {
     attributes: { exclude: ['id', 'createdAt', 'updatedAt'] },
     include: [
@@ -31,21 +31,18 @@ router.get('/:id', async (req, res) => {
         model: Blog,
         as: 'readings',
         attributes: { exclude: ['userId'] },
-        through: { attributes: ['read', 'id'] },
-        include: [
-          {
-            model: ReadingLists,
-            where: where,
-            required: false,
-          },
-        ]
+        through: { 
+          attributes: ['read', 'id'],
+          where
+       },
       }]
   })
-  if (user) {
+  if (user) {   
     res.json({
       username: user.username,
       name: user.name,
-      readings: user.readings.forEach(reading => { return {
+      readings: [],
+      readings: user.readings.map(reading => { return {
         id: reading.id,
         url: reading.url,
         title: reading.title,
@@ -55,7 +52,7 @@ router.get('/:id', async (req, res) => {
         readinglists: [
           {
             read: reading.readinglists.read,
-            id: reading.readinglists.read,
+            id: reading.readinglists.id,
           }
         ]
       }})

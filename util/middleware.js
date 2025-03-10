@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const { SECRET } = require('./config')
-const { Session, user } = require('../models')
+const { Session, User } = require('../models')
 
 const tokenExtractor = async (req, res, next) => {
     const authorization = req.get('authorization')
@@ -21,10 +21,11 @@ const tokenExtractor = async (req, res, next) => {
         token: authorization.substring(7),
       },
     })
-    if (!sessions) return res.status(401).json({ error: 'Invalid session' })
-
+    if (!sessions[0]) return res.status(401).json({ error: 'Invalid session' })
+    
     const user = await User.findByPk(sessions[0].userId)
-    if (user.active) return res.status(401).json({ error: 'User account disabled' })
+    
+    if (!user.active) return res.status(401).json({ error: 'User account disabled' })
 
     next()
   }

@@ -3,7 +3,7 @@ const { Op } = require('sequelize')
 
 const { tokenExtractor } = require('../util/middleware')
 
-const { Blog, User } = require('../models')
+const { Blog, User, ReadingLists } = require('../models')
 
 router.get('/', async (req, res) => {
   let where = {}
@@ -67,10 +67,17 @@ router.get('/:id', blogFinder, async (req, res) => {
 })
 
 router.delete('/:id', blogFinder, tokenExtractor, async (req, res) => {
-  if (req.blog && req.decodedToken.username === req.blog.user.username ) {
+  if (!req.blog) res.status(404).send({ error: 'unknown endpoint' })
+
+  if (req.decodedToken.username === req.blog.user.username ) {
+    await ReadingLists.destroy({ where: {blogId: req.blog.id} })
     await req.blog.destroy()
+    res.status(204).end()
   }
-  res.status(204).end()
+  else {
+    return res.status(401).json({ error: 'Invalid user rights' })
+  }
+  
 })
 
 router.put('/:id', blogFinder, async (req, res) => {

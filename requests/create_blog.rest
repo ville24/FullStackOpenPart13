@@ -1,11 +1,11 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZpbGxlM0B2aWxsZS5jb20iLCJpZCI6MiwiaWF0IjoxNzQxNjMzMzQyfQ.zc3lu9MQcf6JcvtOeDb4InaT3zPJHh4BLcb5xmjZiSU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InZpbGxlM0B2aWxsZS5jb20iLCJpZCI6MiwiaWF0IjoxNzQxNzE5NzAzfQ.S2i_GbpRdBWdNonWH6E7uxRb_Fcy0OZaHwZZzsw6cNU
 
 {
-  "title": "Canonical string reduction2",
+  "title": "Canonical string reduction7",
   "author": "Edsger W. Dijkstra4",
   "url": "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
   "likes": "12",
-  "year": "1996"
+  "year": "2026"
 }

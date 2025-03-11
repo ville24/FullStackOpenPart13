@@ -1,5 +1,6 @@
 const express = require('express')
 require('express-async-errors')
+const { unknownEndpoint, errorHandler } = require('./util/middleware')
 const app = express()
 
 const { PORT } = require('./util/config')
@@ -21,27 +22,8 @@ app.use('/api/logout', logoutRouter)
 app.use('/api/authors', authorsRouter)
 app.use('/api/readinglists', readinglistsRouter)
 
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
 app.use(unknownEndpoint)
-
-const errorHandler = (error, request, response, next) => {
-  console.error(error.message)
-
-  if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
-  }
-  if (error.name ==='SequelizeValidationError') {
-    return response.status(400).send({ error: [ error.message ] })
-  }
-
-  next(error)
-}
-
 app.use(errorHandler)
-
 
 const start = async () => {
   await connectToDatabase()

@@ -1,6 +1,6 @@
-PUT http://localhost:3001/api/users/ville
+PUT http://localhost:3001/api/users/ville4@ville.com
 Content-Type: application/json
 
 {
-  "name": "Ville S2"
+  "name": "Ville 400"
 }
